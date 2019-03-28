@@ -1,0 +1,588 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\rightmargin 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{titlepage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+title{EC503 Project: Regression Robustness on Noisy Data}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+author{Emily Stern 
+\backslash
+
+\backslash
+U55230573 
+\backslash
+
+\backslash
+emistern@bu.edu}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+maketitle
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{titlepage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pagenumbering{arabic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Project Proposal
+\end_layout
+
+\begin_layout Standard
+The purpose of this project is to document the performance of different
+ regression algorithms on noisy data.
+ The algorithms tested include ordinary least squares, RANSAC, Theil-Sen,
+ and Repeated Median Regression.
+ The expectation is that each algorithm will exhibit differences in determinism,
+ computing complexity, implementation complexity, and sensitivity to outliers
+ in the data.
+\end_layout
+
+\begin_layout Section
+Algorithm Overviews
+\end_layout
+
+\begin_layout Subsection
+OLS
+\end_layout
+
+\begin_layout Subsection
+Random Sample Consensus (RANSAC)
+\end_layout
+
+\begin_layout Subsubsection
+Penn State Overview 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RANSAC-PSU"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Psuedo Code
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+User Determined:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+s: smallest number of points requried
+\end_layout
+
+\begin_layout Enumerate
+N: number of iterations required
+\end_layout
+
+\begin_layout Enumerate
+d: threshold used to identify a point that fits well
+\end_layout
+
+\begin_layout Enumerate
+T: number of nearby points required
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Until N iterations have occurred
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+draw a sample of S points from the data uniformly and at random
+\end_layout
+
+\begin_layout Enumerate
+fit to that set of S points
+\end_layout
+
+\begin_layout Enumerate
+for each dat point outside the sample
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+test the distance from the point to the line against d if the distance from
+ the point to the line is less than d the point is close
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+If there are T or more points close to the line then there is a good fit.
+ Refit the line using all these points
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use the best fit from this collection, using the fitting error as a criterion
+\end_layout
+
+\end_deeper
+\begin_layout Subsubsection
+Video on Youtube - https://www.youtube.com/watch?v=UKhh_MmGIjM
+\end_layout
+
+\begin_layout Enumerate
+essntially you pick a sample of datapoints from your dataset, if you're
+ trying to make a line to fit your data then you need two points
+\end_layout
+
+\begin_layout Enumerate
+then you find the model for the selected data, find the tangent ?
+\end_layout
+
+\begin_layout Enumerate
+then you test all of your data against the model
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+check if there are inliars or not based on threshold.
+ if the distance between the given data and the line to see if they're less
+ than the threshold then it's an inliar
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+if the new model is better than the best model that we have so far, based
+ on # of inliers, then this now becomes the best model
+\end_layout
+
+\begin_layout Enumerate
+repeat until N samples
+\end_layout
+
+\begin_layout Enumerate
+How to pick parameters? Choose N samples such that with probability of .99
+ at least one random sample is not an outlier
+\end_layout
+
+\begin_layout Enumerate
+e = probability that point is an outlier
+\end_layout
+
+\begin_layout Enumerate
+1-e is probability that point is an inliar
+\end_layout
+
+\begin_layout Enumerate
+(1-e)^s since we have to choose s samples (datapoints are independent of
+ each other) 
+\begin_inset Formula 
+\[
+(1-e)^{s}
+\]
+
+\end_inset
+
+
+\begin_inset Formula $1-(1-e)^{s}$
+\end_inset
+
+ at least there is one or more outliars in our data
+\end_layout
+
+\begin_layout Enumerate
+we choose N samples 
+\begin_inset Formula $(1-(1-e)^{s})^{N}$
+\end_inset
+
+ P(a,b) = P(a)*P(b) the probability that we choose N samples and there are
+ outliars in the samples
+\end_layout
+
+\begin_layout Enumerate
+probability that we have chosen N samples and not all of them are contaminated.
+ there is at least inliar in our data
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $p=1-(1-(1-e)^{s})^{N}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+with probability of 99% at least one inliar in our data set
+\end_layout
+
+\begin_layout Subsubsection
+Second Youtube Video - https://www.youtube.com/watch?v=BpOKB3OzQBQ
+\end_layout
+
+\begin_layout Enumerate
+Least squares is super sensitive to outliars bc the cost function we're
+ minimizing is the distance between the point and the line.
+ if you have one outliar it will have a LARGE distance to the line that
+ fits the inliars.
+ so since you're minimizing the error of distance to line you disregard
+ how good the line is doing in accuracy of classifying??
+\end_layout
+
+\begin_layout Enumerate
+RANSAC:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+good samples agree with underlying model
+\end_layout
+
+\begin_layout Enumerate
+bad samples do no consistently agree with a single model (each outliar is
+ different and complicated?)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+how many samples do i want to pick?
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+if we randomly pick points, there's a good chance we pick a good point since
+ we're assuming number of good samples >> bad samples.
+ you want to pick a small amount of points so that the probability of picking
+ a bad sample stays low
+\end_layout
+
+\begin_layout Enumerate
+2 points is the minimum number of points needed to make a line
+\end_layout
+
+\begin_layout Enumerate
+hope that the two points you pick not only belong to the good samples but
+ also to the centered part of the good group so it'll make a good line
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+build a model (assume the two points you picked belong to good model)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+apply least squares to the two points
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+measure how well the model conforms to the points around it
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+here's the line and all the other points can they be conforming to this
+ line or not.
+\end_layout
+
+\begin_layout Enumerate
+measure the distance of each point to the line and compare to threshold
+\end_layout
+
+\begin_layout Enumerate
+if you're within threshold you're an inlier
+\end_layout
+
+\begin_layout Enumerate
+count number of inliers
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+then repeat for N iterations
+\end_layout
+
+\begin_layout Enumerate
+how many tiems do i need to sample?
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+if you have a 100 points, how many points are good points? just an estimate,
+ you can compute it with a feature something?
+\end_layout
+
+\begin_layout Enumerate
+w = probability of choosing an inlier
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $w^{N}$
+\end_inset
+
+ probability of building a correct model with N samples
+\end_layout
+
+\begin_layout Enumerate
+probability of not building a correct model during k iterations 
+\begin_inset Formula $(1-w^{N})^{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+probability if you pick two points k times and you fail to find a model?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+you only need ot be lucky once to find a model
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+general thoughts
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+likely will take very long to do since you have to calculate the distance
+ between every point and the line you make to figure out how good the line
+ is.
+ this is our metric for determinging how good a fit you have.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Theil-Sen
+\end_layout
+
+\begin_layout Enumerate
+Wikipedia
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+method for robustly fitting line to sample points in the plane by choosing
+ median of slopes of all lines through pairs of points
+\end_layout
+
+\begin_layout Enumerate
+taking the median over all pairs of points protects it from outliers
+\end_layout
+
+\begin_layout Enumerate
+it is significantly more accurate than non-robust simple linear regression
+ for skewed and heteroskedastic data
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+https://math.iupui.edu/~hanxpeng/Talks/TSETalk.pdf
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $\hat{\beta}_{n}=Median\left\{ \frac{Y_{i}-Y_{j}}{x_{i}-x_{j}}:x_{i}\neq x_{j},i<j=1,..,n\right\} $
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+link to actual paper: http://www.dwc.knaw.nl/DL/publications/PU00018789.pdf
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+basically you loop through all the pairs of samples and calculate the slope
+ and y intercept?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+https://www.youtube.com/watch?v=ZT9NvTXusDk
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+good idea to keep list of slopes sorted
+\end_layout
+
+\begin_layout Enumerate
+for multiple dimensions problems need to figure out how to choose median
+ of a multi dimensional problem...
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Repeated Median Regression
+\end_layout
+
+\begin_layout Section
+References:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintCited"
+bibfiles "references"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
