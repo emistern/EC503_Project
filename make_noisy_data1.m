@@ -7,5 +7,6 @@ function [x,y]=make_noisy_data1(m,b)
     end
     scatter(x,y)
 end
+% Adds noise to every point in dataset
     
     
