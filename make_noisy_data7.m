@@ -1,8 +1,6 @@
 % Generate linear data with noise and outliers
-[X, Y] = generate_linear_data(2, 6, [10 100], [1000 4000], 0.05);
-scatter(X, Y, '.');
-
-function [X, Y] = generate_linear_data(m, b, noise_bounds, outlier_offset_bounds, outlier_probability)
+% e.g. [X, Y] = make_noisy_data7(2, 6, [10 100], [1000 4000], 0.05);
+function [X, Y] = make_noisy_data7(m, b, noise_bounds, outlier_offset_bounds, outlier_probability)
 % GENERATE_LINEAR_DATA  Generate linear data with random noise and random outliers
 %   [X, Y] = GENERATE_LINEAR_DATA(M,B,NOISE_BOUNDS,OUTLIER_OFFSET_BOUNDS,OUTLIER_PROBABILITY)
 %   Generates linear data, mapping X to Y with slope M and intercept B.
@@ -19,4 +17,5 @@ function [X, Y] = generate_linear_data(m, b, noise_bounds, outlier_offset_bounds
     all_outliers = (outlier_offset_bounds(2) - outlier_offset_bounds(1)) .* rand(size(X, 1), 1) + outlier_offset_bounds(1);
     filtered_outliers = all_outliers .* (rand(size(X, 1), 1) < outlier_probability);
     Y = m * X + b + noise + filtered_outliers;
+    scatter(X, Y, '.')
 end
