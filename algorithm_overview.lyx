@@ -195,6 +195,95 @@ OLS
 Random Sample Consensus (RANSAC)
 \end_layout
 
+\begin_layout Standard
+Random Sample Consensus 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RANSAC-paper"
+literal "false"
+
+\end_inset
+
+, RANSAC, is a stochastic linear regression model used specifically for
+ situations when the dataset being modeled contains a portion of outliers.
+ The origin of RANSAC comes from solving the computer vision Location Determinat
+ion Problem, LDP.
+ LDP aims to determine the location of the point where the image was taken
+ given the location of some landmarks in the image are known.
+ Often times in this problem the images are riddled withoutliers and therefore
+ do not work well with typical regression models.
+ Fischler and Bolles 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RANSAC-paper"
+literal "false"
+
+\end_inset
+
+ mention that the current, at the time in 1981, methods used to solve LDP
+ include Least Squares which aims to optimize an objection function across
+ the entire sample set.
+ There is a major assumption ('smoothing assumption') that the data across
+ the entire dataset will be close to one another, i.e.
+ the standard deviation of the data set will be small.
+ If even a single outlier is added in to the data set and the smoothing
+ assumption no longer holds the model created by least squares will essentially
+ be of no use.
+ __INSERT_FIGURE_HERE_.
+ The authors of RANSAC found a way to combat outliers in a data set by iterating
+ the regression problem with the minimum number of points needed to define
+ the model and counting the number of points within some specified distance
+ to the model.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename ransac_psuedocode.png
+	scale 80
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RANSAC Psuedocode
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+If the number of points within the distance is greater than all of the other
+ iterations, the current model becomes the model of choice for the full
+ data set.
+ The number of iterations completed by RANSAC is determined by the user,
+ along with the distance threshold, and the number of points used to define
+ the model.
+ The underlying assumption that enables this model to work when outliers
+ are present is that there are more inliers than outliers in the dataset.
+ This specifically comes into play when randomly selecting the points in
+ the dataset to use for each iteration.
+ The model is essentially assuming that there's a good probability that
+ we're selecting inliers over outliers so the model that's going to be made
+ should work across the full data set.
+\end_layout
+
 \begin_layout Subsubsection
 Penn State Overview 
 \begin_inset CommandInset citation
