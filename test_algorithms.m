@@ -6,6 +6,7 @@ run_test(@make_noisy_data5, 3, 1);
 run_test(@make_noisy_data6, 3, 1);
 run_test(@(m, b) make_noisy_data7(m, b, [10 100], [600 800], 0.48), 3, 1);
 
+
 function run_test(f, m1, b1)
     [Xtr ytr is_outlier] = f(m1, b1);
     
@@ -22,5 +23,9 @@ function run_test(f, m1, b1)
     tsf=refline(m, b);
     tsf.Color='red';
     
-    legend('data', 'outliers', 'Repeated Median', 'Theil Sen');
+    [m, b] = ransac_implementation(Xtr, ytr);
+    rsc=refline(m,b);
+    rsc.Color='green';
+    
+    legend('data', 'outliers', 'Repeated Median', 'Theil Sen', 'Ransac');
 end
