@@ -1,0 +1,7 @@
+s = minimum number of datapoints needed to make model
+for each unique grouping of s in the dataset, S_iter
+	Calculate the regression model for S_iter
+	add model for S_iter to list of all models
+best_model = median(all_models)
+
+

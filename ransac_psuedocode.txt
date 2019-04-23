@@ -1,0 +1,14 @@
+s = smallest number of points to define model
+N = number of iterations 
+d = distance to line threshold 
+T = number of inliers
+While iterations < N
+	draw s points from data set
+	fit model to s points
+	T = 0
+	for all other points in data set not in s
+		if point < d distance to model
+			T = T + 1
+	if T of this model > T of previous model
+		best model = this model
+	
