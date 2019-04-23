@@ -53,7 +53,7 @@ n_pts_in_model = ndim +1; %2; % linear
 dist_thresh = 1;
 
 % Array to store number of inliers, slope, intercept
-metric_data = zeros(numIterations,ndim+3); 
+metric_data = zeros(numIterations,3); 
 for k = 1:numIterations
     % 1. Draw sample of n points uniformly
     inds = randi([1 m_train],n_pts_in_model,1);
@@ -72,25 +72,23 @@ for k = 1:numIterations
         %[m, b] = fit_a_hyperplane(v);
         x_data = [v(1:ndim,:); ones(1,3)]';
         y_data = v(ndim+1,:)';
-        m = pinv(x_data'*x_data) * x_data' * y_data;
+        b_ols = pinv(x_data'*x_data) * x_data' * y_data;
         % 3. Compute distances to this line
-        [dists] = all_pts_to_hyperplanes(rest_of_data, v(:,1), v(:,2), v(:,3));
+        [dists] = all_pts_to_hyperplanes(rest_of_data, v(:,1), v2, v3);
     end
     % 4. Compute number of inliers vs. outliers
     num_in = sum(dists <= dist_thresh);
-    metric_data(k,:) = [num_in m' true_int];
+    metric_data(k,:) = [num_in m true_int];
 end
 
 % Find index with maximum number of inliers
 [~, best_ind] = max(metric_data(:,1));
-best_m = metric_data(best_ind,2:ndim+1);
-best_b = metric_data(best_ind,ndim+3);
+best_m = metric_data(best_ind,2);
+best_b = metric_data(best_ind,3);
 % Plot results
-x_tmp = linspace(0, 1000, 1000);
-x1_tmp = repmat(x_tmp, length(x_tmp),1);
-x2_tmp = x1_tmp';
-%plot(x_tmp, best_m*x_tmp + best_b)
-plot3(x1_tmp, x2_tmp, x1_tmp.*best_m(1) + x2_tmp.*best_m(2)+best_b)
+x_tmp = linspace(min(X_train), max(X_train), 1000);
+plot(x_tmp, best_m*x_tmp + best_b)
+
 % TODO: plot the inliers and the outliers
 
 function [x,y]=make_noisy_data3(m,b,num_sample)
