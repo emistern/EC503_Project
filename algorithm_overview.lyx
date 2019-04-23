@@ -110,15 +110,23 @@ title{EC503 Project: Regression Robustness on Noisy Data}
 
 
 \backslash
-author{Emily Stern 
+author{Katherine Levinson
 \backslash
 
 \backslash
-U55230573 
+ Youn Soo (Julie) Park
 \backslash
 
 \backslash
-emistern@bu.edu}
+ Leah Pillsbury
+\backslash
+
+\backslash
+ Emily Stern emistern@bu.edu U55230573
+\backslash
+
+\backslash
+ Daniel Wilson}
 \end_layout
 
 \begin_layout Plain Layout
@@ -170,7 +178,7 @@ pagenumbering{arabic}
 \end_layout
 
 \begin_layout Section
-Project Proposal
+Abstract
 \end_layout
 
 \begin_layout Standard
@@ -181,6 +189,15 @@ The purpose of this project is to document the performance of different
  The expectation is that each algorithm will exhibit differences in determinism,
  computing complexity, implementation complexity, and sensitivity to outliers
  in the data.
+ The major overlapping assumptions across all three robust regression methods
+ is that there needs to be more inliers than outliers in the dataset.
+ Each algorithm has a different breakdown point', the specific ratio of
+ inliers to outliers, that causes the algorithm to fail.
+ Additionally, all three robust regression algorithms are relatively simple
+ to implement, but all have unique drawbacks on computational efficiency.
+ The background of each algorithm, strengths and weaknesses of each algorithm,
+ along with complexity of implementation, and other algorithm-specific tradeoffs
+ will be discussed below.
 \end_layout
 
 \begin_layout Section
@@ -189,6 +206,11 @@ Algorithm Overviews
 
 \begin_layout Subsection
 OLS
+\end_layout
+
+\begin_layout Standard
+The breakdown point for OLS is 0%! i.e.
+ it cannot tolerate any outliers
 \end_layout
 
 \begin_layout Subsection
@@ -210,7 +232,7 @@ literal "false"
 ion Problem, LDP.
  LDP aims to determine the location of the point where the image was taken
  given the location of some landmarks in the image are known.
- Often times in this problem the images are riddled withoutliers and therefore
+ Often times in this problem the images are riddled with outliers and therefore
  do not work well with typical regression models.
  Fischler and Bolles 
 \begin_inset CommandInset citation
@@ -226,14 +248,24 @@ literal "false"
  There is a major assumption ('smoothing assumption') that the data across
  the entire dataset will be close to one another, i.e.
  the standard deviation of the data set will be small.
- If even a single outlier is added in to the data set and the smoothing
- assumption no longer holds the model created by least squares will essentially
+ If even a single outlier is added in to the data set then smoothing assumption
+ no longer holds and the model created by least squares will essentially
  be of no use.
  __INSERT_FIGURE_HERE_.
  The authors of RANSAC found a way to combat outliers in a data set by iterating
  the regression problem with the minimum number of points needed to define
  the model and counting the number of points within some specified distance
  to the model.
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:RANSAC-Psuedocode"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -247,7 +279,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename ransac_psuedocode.png
-	scale 80
+	scale 65
 
 \end_inset
 
@@ -256,6 +288,13 @@ status open
 
 \begin_layout Plain Layout
 RANSAC Psuedocode
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:RANSAC-Psuedocode"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -282,6 +321,122 @@ If the number of points within the distance is greater than all of the other
  The model is essentially assuming that there's a good probability that
  we're selecting inliers over outliers so the model that's going to be made
  should work across the full data set.
+ Although RANSAC is a great algorithm for linear regression where the dataset
+ contains outliers, it's ability to scale with number of samples is poor
+ as it needs to check whether each point in the full dataset is within the
+ distance threshold for every model.
+\end_layout
+
+\begin_layout Subsection
+Theil-Sen
+\end_layout
+
+\begin_layout Standard
+A different approach to making linear regression models robust to outliers
+ is Theil-Sen
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thiel_sen-paper"
+literal "false"
+
+\end_inset
+
+.
+ The deterministic algorithm loops over all unique pairs of data points
+ in the full data set and calculates the regression model for each pairing.
+ It chooses the median slope as the best model across the entire data set.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:Thiel-sen"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename thiel_sen_psuedocode.png
+	scale 65
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Thiel-Sen Psuedocode
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:Thiel-sen"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A major drawback to Theil-Sen is that it loops over all unique pairs (or
+ minimum number of datapoints needed for model) of the entire dataset.
+ Therefore the computational complexity of this algorithm is 
+\begin_inset Formula $O(n^{2})$
+\end_inset
+
+, where n is the number of samples in the dataset.
+ Again the assumption holds that there must be more inliers than outliers
+ for this algorithm to work and the specific ratio of inliers to outliers
+ is a breaking point of 29.3% 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "thiel-sen-lecture"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+*** Need to find a source for breakdown point as well as computation complexity
+ ***
+\end_layout
+
+\begin_layout Subsection
+Repeated Median Regression
+\end_layout
+
+\begin_layout Section
+Old Notes
+\end_layout
+
+\begin_layout Subsection
+RANSAC
 \end_layout
 
 \begin_layout Subsubsection
@@ -586,12 +741,11 @@ likely will take very long to do since you have to calculate the distance
  between every point and the line you make to figure out how good the line
  is.
  this is our metric for determinging how good a fit you have.
- 
 \end_layout
 
 \end_deeper
 \begin_layout Subsection
-Theil-Sen
+Theil-sen
 \end_layout
 
 \begin_layout Enumerate
@@ -653,10 +807,6 @@ for multiple dimensions problems need to figure out how to choose median
 \end_layout
 
 \end_deeper
-\begin_layout Subsection
-Repeated Median Regression
-\end_layout
-
 \begin_layout Section
 References:
 \end_layout
