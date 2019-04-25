@@ -10,25 +10,41 @@ run_test2d(@make_single_2d_outlier, [5;2], 4);
 
 function run_test(f, m1, b1)
     [Xtr ytr is_outlier] = f(m1, b1);
+    [Nb_samples, ~] = size(Xtr);
     
     figure();
     hold on;
     scatter(Xtr(~is_outlier), ytr(~is_outlier), 4, 'k');
     scatter(Xtr(is_outlier), ytr(is_outlier), 4, [.8 .8 .8]);
-    
+    tic;
     [m, b] = repeated_median_fit(Xtr, ytr);
+    rmc_t = toc;
     rmf=refline(m, b);
     rmf.Color='blue';
+    y_rmf = Xtr*m + b;
     
+    tic;
     [m, b] = theil_sen_fit(Xtr, ytr);
+    tsf_t = toc;
     tsf=refline(m, b);
     tsf.Color='red';
+    y_tsf = Xtr*m+b;
     
+    tic;
     [m, b] = ransac_implementation(Xtr, ytr);
+    rsc_t = toc;
     rsc=refline(m,b);
     rsc.Color='green';
+    y_rsc = Xtr*m+b;
     
-    legend('data', 'outliers', 'Repeated Median', 'Theil Sen', 'Ransac');
+    % Calculate mean_squared_error
+    y_true = Xtr*m1 + b1;
+    rmf_mse = (1/Nb_samples)*(y_true - y_rmf)'*(y_true - y_rmf);
+    tsf_mse = (1/Nb_samples)*(y_true - y_tsf)'*(y_true - y_tsf);
+    rsc_mse = (1/Nb_samples)*(y_true - y_rsc)'*(y_true - y_rsc);
+    
+    legend(['data ' num2str(0)], ['outliers ' num2str(2)], ['Repeated Median ' num2str(rmf_mse, 3) ' ' num2str(rmc_t, 3)], ['Theil Sen ' num2str(tsf_mse, 3) ' ' num2str(tsf_t, 3)], ['Ransac ' num2str(rsc_mse, 3) ' ' num2str(rsc_t, 3)]);
+    results = [rmc_t, tsf_t, rsc_t, rmf_mse, tsf_mse, tsf_mse];
 end
 
 function run_test2d(f, m1, b1)
