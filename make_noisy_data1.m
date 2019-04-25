@@ -1,4 +1,5 @@
 function [x,y,is_outlier]=make_noisy_data1(m,b)
+    % data
     x=linspace(0,1000).';
     y=m.*x+b;
     for i=1:100
