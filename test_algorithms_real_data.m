@@ -45,6 +45,7 @@ function test_algorithms_real_data()
     revenue = alldata(:,2);
     instr_expend = alldata(:,7);
     math_grade4 = alldata(:,19);
+    math_grade8 = alldata(:,20);
     
     figure(5)
     scatter(revenue,math_grade4)
@@ -57,10 +58,15 @@ function test_algorithms_real_data()
     xlabel("all states enrollment")
     ylabel("instructional expenditure")
     figure(7)
-    scatter(instr_expend,math_grade4)
-    title("instructional expenditure and math grade 4 test scores for all states, 1992-2017")
-    xlabel("instructional expenditure")
+    scatter(instr_expend./enroll,math_grade4)
+    title("instructional expenditure per pupil and math grade 4 test scores for all states, 1992-2017")
+    xlabel("instructional expenditure per pupil")
     ylabel("math grade 4 outcomes")
+    figure(8)
+    scatter(instr_expend./enroll,math_grade8)
+    title("instructional expenditure per pupil and math grade 8 test scores for all states, 1992-2017")
+    xlabel("instructional expenditure per pupil")
+    ylabel("math grade 8 outcomes")
     
     %2017 GDP per capita and health indicators for all countries
     world_data=csvread('gdp_health.csv',1,1);
@@ -68,12 +74,12 @@ function test_algorithms_real_data()
     birth = world_data(:,2);
     HIV = world_data(:,3);
     
-    figure(8)
+    figure(9)
     scatter(GDP,birth)
     title("GDP and adolescent birth rate")
     xlabel("GDP")
     ylabel("birth rate")
-    figure(9)
+    figure(10)
     scatter(GDP,HIV)
     xlabel("GDP")
     ylabel("HIV incidence")
@@ -86,22 +92,22 @@ function test_algorithms_real_data()
     admit_chance = admissions(:,8);
     rating = admissions(:,3);
     GPA = admissions(:,6);
-    figure(10)
+    figure(11)
     scatter(GRE,admit_chance)
     title("GRE score and chance of admissions")
     xlabel("GRE score")
     ylabel("admission chance")
-    figure(11)
+    figure(12)
     scatter(TOEFL, admit_chance)
     title("TOEFL score and chance of admissions")
     xlabel("TOEFL score")
     ylabel("admission chance")
-    figure(12)
+    figure(13)
     scatter(GPA,admit_chance)
     title("GPA and chance of admissions")
     xlabel("GPA")
     ylabel("admission chance")    
-    figure(13)
+    figure(14)
     title("GPA and university rating")
     xlabel("GPA")
     ylabel("university rating")
