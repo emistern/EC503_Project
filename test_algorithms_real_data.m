@@ -1,4 +1,13 @@
 function test_algorithms_real_data()
+    % plot a variety of variables against each other to see which datasets
+    % will be useful to run on our algorithms
+    % I definitely think the graduate admissions ones look worthwhile, I
+    % also think some of the funky data from global datasets could be
+    % useful for comparison
+    % some of the MAß education spending data is interesting too
+    % if we want to do multiple features, the admissions one makes the most
+    % sense
+    
 
     % make a variety of plots based on MA education data
     % are any of these combinations worth regressing?
@@ -69,5 +78,33 @@ function test_algorithms_real_data()
     xlabel("GDP")
     ylabel("HIV incidence")
     title("GDP and HIV incidence")
+    
+    % Admissions prediction dataset
+    admissions = csvread('Admission_Predict.csv',1,1);
+    GRE = admissions(:,1);
+    TOEFL = admissions(:,2);
+    admit_chance = admissions(:,8);
+    rating = admissions(:,3);
+    GPA = admissions(:,6);
+    figure(10)
+    scatter(GRE,admit_chance)
+    title("GRE score and chance of admissions")
+    xlabel("GRE score")
+    ylabel("admission chance")
+    figure(11)
+    scatter(TOEFL, admit_chance)
+    title("TOEFL score and chance of admissions")
+    xlabel("TOEFL score")
+    ylabel("admission chance")
+    figure(12)
+    scatter(GPA,admit_chance)
+    title("GPA and chance of admissions")
+    xlabel("GPA")
+    ylabel("admission chance")    
+    figure(13)
+    title("GPA and university rating")
+    xlabel("GPA")
+    ylabel("university rating")
+    scatter(GPA,rating)
     
 end
