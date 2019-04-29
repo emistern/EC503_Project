@@ -28,8 +28,7 @@ function [m, b, breakdown_point] = theil_sen_fit(Xtr, ytr, max_samples)
         % suggests staying moderately small, on the order of 50.
         %
         % Note, in terms of unknowns: x1+x2+b=y1+y2 ==> x1+x2+b-y1=y2
-        % Cancel out: +1 for bias column, -1 for one of the ytr columns
-        subsample_size = d + size(ytr, 2);
+        subsample_size = d + size(ytr, 2) + 1;
         
         % With small subsample sizes, the number of required samples grows
         % very fast at nchoosek(samples, subsamples).
@@ -37,9 +36,9 @@ function [m, b, breakdown_point] = theil_sen_fit(Xtr, ytr, max_samples)
         
         % Limit resource usage by limiting our sample count.
         if nargin == 3
-            samples = min(samples, max_samples);
+            samples = min([samples, max_samples]);
         else
-            samples = min(samples, 1e4);
+            samples = min([samples, 1e4]);
         end
         
         % From MSEE paper. It is asymptotic breakdown scaled down by
