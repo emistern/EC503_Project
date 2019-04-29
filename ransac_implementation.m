@@ -4,7 +4,7 @@ function [best_m, best_b] = ransac_implementation(X_train, Y_train)
 ndim = length(d_train);
 
 % Parameters setting
-numIterations = 30;
+numIterations = 100;
 n_pts_in_model = ndim + 1; % linear
 dist_thresh = 4;
 
