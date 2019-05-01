@@ -1,3 +1,5 @@
+% Generate the images used in the presentation and report
+
 % Load first image
 image1 = (imread('cameraman.tif')) ;
 if size(image1, 3) == 3
@@ -50,26 +52,51 @@ Q = [matchedImage2Points.Location ones(matchedImage2Points.Count, 1)];
 outputView = imref2d(size(image1));
 
 % Map image2 to image1 coordinates using OLS
+display('ols');
+tic;
 olsxform = Q\P;
+ols_time = toc;
 olsxform(:,3)=[0;0;1];
 olsaffine2d = affine2d(olsxform);
 olsIr = imwarp(image2, olsaffine2d, 'OutputView', outputView);
+immse_ols = immse(olsIr, image1);
 figure; imshow(olsIr);
 title('OLS mapping of image2 to image1');
 saveas(gcf, '../image_examples/ols_mapping.png');
 
 % Map image2 to image1 coordinates using Theil-Sen
+display('Theil-Sen');
+tic;
 [m,b,breakdown] = theil_sen_fit(Q(:,1:2), P(:,1:2), 100);
+ts_time = toc;
 tsxform = [[m; b] [0;0;1]];
 tsaffine2d = affine2d(tsxform);
 tsIr = imwarp(image2, tsaffine2d, 'OutputView', outputView);
+immse_ts = immse(tsIr, image1);
 figure; imshow(tsIr);
 title('Theil-Sen mapping of image2 to image1');
 saveas(gcf, '../image_examples/ts_mapping.png');
 
+% Map image2 to image1 coordinates using our RANSAC
+display('RANSAC');
+tic;
+[m,b] = messy_ransac_implementation_(Q(:,1:2), P(:,1:2));
+ransac_time = toc;
+rxform = [[m; b] [0;0;1]];
+raffine2d = affine2d(rxform);
+rIr = imwarp(image2, raffine2d, 'OutputView', outputView);
+immse_r = immse(rIr, image1);
+figure; imshow(rIr);
+title('RANSAC mapping of image2 to image1');
+saveas(gcf, '../image_examples/r_mapping.png');
+
 % Map image2 to image1 coordinates using MSAC
-[xform, inlierImage2Points, inlierImage1Points] = estimateGeometricTransform(matchedImage2Points, matchedImage1Points, 'affine');
+display('MSAC');
+tic;
+[xform, inlierImage2Points, inlierImage1Points] = estimateGeometricTransform(matchedImage2Points, matchedImage1Points, 'similarity');
+msac_time = toc;
 msacIr = imwarp(image2, xform, 'OutputView', outputView);
+immse_msac = immse(msacIr, image1);
 figure; imshow(msacIr);
 title('MSAC mapping of image2 to image1');
 saveas(gcf, '../image_examples/msac_mapping.png');
@@ -78,3 +105,6 @@ figure;
 showMatchedFeatures(image1, image2, inlierImage1Points, inlierImage2Points, 'montage');
 title('Matched Points, Inliers Only');
 saveas(gcf, '../image_examples/msac_inliers.png');
+
+display(['ols mse: ', num2str(immse_ols), ', T-S mse: ', num2str(immse_ts), ', RANSAC mse: ', num2str(immse_r), ', MSAC mse: ', num2str(immse_msac)]);
+display(['ols time: ', num2str(ols_time), ', T-S time: ', num2str(ts_time), ', RANSAC time: ', num2str(ransac_time), ', MSAC time: ', num2str(msac_time)]);
