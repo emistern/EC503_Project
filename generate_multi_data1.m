@@ -1,8 +1,9 @@
-function [x,y,z] = generate_multi_data1(num_sample,m,b)
-
-    x =linspace(1,100,num_sample);
-    x = repmat(x,num_sample ,1);
-    y = x';
-    z = x.*m(1) + y.*m(2) + b;
-
+function [X,Y,is_outlier] = generate_multi_data1(m, b)
+%With noise
+    [X1 X2] = meshgrid(1:5);
+    X = [X1(:) X2(:)];
+    Y = X.*m + b;
+    Y(11) = Y(11) * 10;
+    is_outlier=false(size(Y));
+    is_outlier(11) = true;
 end
