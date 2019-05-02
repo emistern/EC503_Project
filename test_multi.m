@@ -1,1 +1,3 @@
-run_test(@generate_multi_data1,10,[5 3],1);
+clear, clc
+
+[Xtr,ytr,ztr,z_hat] = run_test_multi(@generate_multi_data1,[5 3],5);
