@@ -1,12 +1,12 @@
 function [x, y] = gen_data(nb_features, noise, nb_samples, shuffled)
 % Generate Synthetic Dataset
 
-x_unshuf = repmat(linspace(1, 100, nb_samples), nb_features);
+x_unshuf = repmat(linspace(1, 100, nb_samples), nb_features,1)';
 y_unshuf = zeros(nb_samples, 1);
 
 
 for a_feature = 1:nb_features
-    y_unshuf = y_unshuf + x_unshuf(:,a_feature)' * randi([-5 5]);
+    y_unshuf = y_unshuf + x_unshuf(:,a_feature) * randi([-5 5]);
 end
 
 if noise == 1
