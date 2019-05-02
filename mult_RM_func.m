@@ -1,5 +1,5 @@
 function [t1, t2, t3] = mult_RM_func(x,y,z)
-
+%Repeated median in 3D
     z = z(:); y= y(:); x=x(:);
     for i = 1:length(x)
         
